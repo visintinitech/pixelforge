@@ -1,4 +1,4 @@
-# 🎨 **PixelForge** – Editor de Pixel Art Retro con superpoderes / # 🎨 **PixelForge** – Retro Pixel Art Editor with Superpowers
+# 🎨 **PixelForge** – Editor de Pixel Art Retro con superpoderes / 🎨 **PixelForge** – Retro Pixel Art Editor with Superpowers
 
 ---
 
