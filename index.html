@@ -1,20 +1,14 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>PixelForge · Editor Pixel Art</title>
+  <!-- La librería gif.js ya no es necesaria si usamos el backend, pero la dejamos por si acaso -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gif.js/0.2.0/gif.js"></script>
   <style>
-    /* ========== ESTILO RETRO (base) ========== */
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      user-select: none;
-    }
-
+    /* ========== ESTILOS (igual que antes, pero con algunos ajustes) ========== */
+    * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; }
     body {
       background: #1a1a2e;
       font-family: 'Courier New', Courier, monospace;
@@ -25,7 +19,6 @@
       min-height: 100vh;
       padding: 20px;
     }
-
     .app {
       background: #16213e;
       padding: 20px;
@@ -35,7 +28,6 @@
       max-width: 1500px;
       width: 100%;
     }
-
     .header {
       display: flex;
       justify-content: space-between;
@@ -46,27 +38,23 @@
       flex-wrap: wrap;
       gap: 8px;
     }
-
     .header h1 {
       font-size: 28px;
       color: #00d4ff;
       text-shadow: 0 0 10px #00d4ff88;
       letter-spacing: 3px;
     }
-
     .header h1 small {
       font-size: 14px;
       color: #8888aa;
       text-shadow: none;
       margin-left: 12px;
     }
-
     .header-actions {
       display: flex;
       flex-wrap: wrap;
       gap: 6px;
     }
-
     .header-actions button {
       background: #0f3460;
       border: 2px solid #00d4ff;
@@ -83,14 +71,12 @@
       color: #0f3460;
       box-shadow: 0 0 20px #00d4ff88;
     }
-
     .main-layout {
       display: flex;
       gap: 20px;
       flex-wrap: wrap;
       justify-content: center;
     }
-
     .panel {
       background: #1a1a2e;
       border: 2px solid #0f3460;
@@ -99,7 +85,6 @@
       min-width: 180px;
       flex: 1 1 180px;
     }
-
     .panel h3 {
       color: #00d4ff;
       font-size: 16px;
@@ -110,7 +95,6 @@
       letter-spacing: 2px;
       text-shadow: 0 0 6px #00d4ff66;
     }
-
     .panel button {
       background: #0f3460;
       border: 1px solid #555577;
@@ -128,21 +112,18 @@
       border-color: #00d4ff;
       color: #fff;
     }
-
     .tool-group {
       display: flex;
       flex-wrap: wrap;
       gap: 4px;
       margin-bottom: 10px;
     }
-
     .tool-group button.active {
       background: #00d4ff;
       color: #0f3460;
       border-color: #00d4ff;
       box-shadow: 0 0 12px #00d4ffaa;
     }
-
     .brush-size {
       display: flex;
       align-items: center;
@@ -161,7 +142,6 @@
       color: #0f3460;
       border-color: #00d4ff;
     }
-
     .color-palette {
       display: grid;
       grid-template-columns: repeat(8, 1fr);
@@ -184,7 +164,6 @@
       border: 3px solid #ffffff;
       box-shadow: 0 0 12px #00d4ff;
     }
-
     .color-picker-wrap {
       display: flex;
       align-items: center;
@@ -202,7 +181,6 @@
       font-size: 13px;
       color: #aaa;
     }
-
     .canvas-wrapper {
       background: #0a0a1a;
       border: 4px solid #0f3460;
@@ -220,8 +198,6 @@
       background: #222;
       cursor: crosshair;
     }
-
-    /* Capas */
     .layer-list {
       max-height: 160px;
       overflow-y: auto;
@@ -271,8 +247,6 @@
       border-radius: 8px;
       color: #aaa;
     }
-
-    /* Timeline */
     .timeline {
       background: #0a0a1a;
       border-radius: 6px;
@@ -320,7 +294,6 @@
       font-size: 12px;
       margin-left: 4px;
     }
-
     .timeline-controls {
       display: flex;
       flex-wrap: wrap;
@@ -356,8 +329,6 @@
       border-radius: 50%;
       cursor: pointer;
     }
-
-    /* Efectos / Capas de ajuste */
     .adjustment-group {
       display: flex;
       flex-wrap: wrap;
@@ -368,8 +339,6 @@
       font-size: 11px;
       padding: 2px 8px;
     }
-
-    /* Sprite sheet */
     .sprite-options {
       display: flex;
       gap: 6px;
@@ -386,43 +355,54 @@
       font-family: inherit;
       text-align: center;
     }
-
-    /* Responsive */
+    .project-list {
+      max-height: 100px;
+      overflow-y: auto;
+      margin-top: 4px;
+    }
+    .project-item {
+      padding: 3px 6px;
+      background: #0f1a2e;
+      margin: 2px 0;
+      border-radius: 3px;
+      cursor: pointer;
+      font-size: 12px;
+      display: flex;
+      justify-content: space-between;
+    }
+    .project-item:hover {
+      background: #1a2a4a;
+    }
+    .project-item .del-proj {
+      color: #ff6b6b;
+      cursor: pointer;
+    }
     @media (max-width: 1000px) {
-      .main-layout {
-        flex-direction: column;
-        align-items: center;
-      }
-      .panel {
-        width: 100%;
-        min-width: unset;
-      }
-      #mainCanvas {
-        width: 320px;
-        height: 320px;
-      }
+      .main-layout { flex-direction: column; align-items: center; }
+      .panel { width: 100%; min-width: unset; }
+      #mainCanvas { width: 320px; height: 320px; }
     }
   </style>
 </head>
 <body>
 
 <div class="app" id="app">
-  <!-- HEADER -->
   <div class="header">
     <h1>◈ PIXELFORGE <small>retro animation studio</small></h1>
     <div class="header-actions">
       <button id="exportPngBtn">📥 PNG</button>
-      <button id="exportGifBtn">🎞️ GIF</button>
+      <button id="exportGifBtn">🎞️ GIF (local)</button>
+      <button id="exportGifServerBtn">🎞️ GIF (servidor)</button>
       <button id="exportSpriteBtn">🖼️ Sprite Sheet</button>
       <button id="importBtn">📂 Importar</button>
       <input type="file" id="fileInput" accept="image/*" style="display:none" />
-      <button id="saveProjectBtn">💾 Guardar proyecto</button>
-      <button id="loadProjectBtn">📂 Abrir proyecto</button>
+      <button id="saveProjectBtn">💾 Guardar local</button>
+      <button id="saveServerBtn">☁️ Guardar en servidor</button>
+      <button id="loadServerBtn">📂 Cargar del servidor</button>
       <input type="file" id="projectInput" accept=".json" style="display:none" />
     </div>
   </div>
 
-  <!-- MAIN -->
   <div class="main-layout">
     <!-- Panel Izquierdo: Herramientas + Capas -->
     <div class="panel" style="flex:1.2;">
@@ -500,7 +480,7 @@
       <canvas id="mainCanvas" width="32" height="32"></canvas>
     </div>
 
-    <!-- Panel Derecho: Timeline + info -->
+    <!-- Panel Derecho: Timeline + info + proyectos -->
     <div class="panel" style="flex:1.2;">
       <h3>⏳ Timeline</h3>
       <div class="timeline">
@@ -533,27 +513,37 @@
         <input type="number" id="spriteCols" value="4" min="1" max="10" />
         <button id="exportSpriteBtn2">Exportar</button>
       </div>
+
+      <h3 style="margin-top:12px;">☁️ Proyectos en servidor</h3>
+      <div style="display:flex;gap:4px;margin-bottom:6px;">
+        <button id="refreshProjectsBtn">🔄 Refrescar</button>
+      </div>
+      <div class="project-list" id="projectList">
+        <div style="color:#888; font-size:13px;">Carga un proyecto o refresca la lista.</div>
+      </div>
     </div>
   </div>
 </div>
 
 <script>
   // ============================================================
-  //  PIXELFORGE - Todas las funcionalidades ampliadas
+  //  PIXELFORGE - Con integración backend (Python/Flask)
   // ============================================================
 
   (function() {
     'use strict';
 
-    // -------- CONSTANTES --------
+    // -------- CONFIGURACIÓN DEL BACKEND --------
+    const BACKEND_URL = 'http://localhost:5000'; // Cambiar si es necesario
+
+    // -------- CONSTANTES Y ESTADO (igual que antes) --------
     const SIZE = 32;
-    const DEF_COLOR = null;          // null = transparente
+    const DEF_COLOR = null;
     const PALETTE = [
       '#000000','#1d2b53','#7e2553','#008751','#ab5236','#5f574f','#c2c3c7','#fff1e8',
       '#ff004d','#ffa300','#ffec27','#00e436','#29adff','#83769c','#ff77a8','#ffccaa'
     ];
 
-    // -------- ESTADO --------
     let state = {
       frames: [],
       currentFrameIndex: 0,
@@ -569,17 +559,15 @@
       playing: false,
       playTimer: null,
       speed: 200,
-      // Selección
-      selection: null,      // { startRow, startCol, endRow, endCol, pixels } o null
+      selection: null,
       isDraggingSelection: false,
       dragOffset: null,
-      clipboard: null,     // { pixels, row, col, w, h }
-      // Lapicera
+      clipboard: null,
       penPoints: [],
       isPenDrawing: false,
     };
 
-    // Referencias DOM
+    // Referencias DOM (igual que antes)
     const canvas = document.getElementById('mainCanvas');
     const ctx = canvas.getContext('2d');
     const layerListEl = document.getElementById('layerList');
@@ -594,15 +582,11 @@
     const symmetryVCheck = document.getElementById('symmetryV');
     const spriteColsInput = document.getElementById('spriteCols');
 
-    // -------- FUNCIONES AUXILIARES --------
-
-    // Crear capa vacía (normal)
+    // -------- FUNCIONES AUXILIARES (iguales que antes) --------
     function createEmptyLayer(name = 'Capa') {
       const pixels = Array.from({ length: SIZE }, () => Array(SIZE).fill(null));
       return { name, visible: true, pixels, type: 'normal' };
     }
-
-    // Crear capa de ajuste
     function createAdjustmentLayer(type, params = {}) {
       return {
         name: type.charAt(0).toUpperCase() + type.slice(1),
@@ -610,18 +594,15 @@
         type: 'adjustment',
         adjustmentType: type,
         params: params,
-        pixels: null, // no tiene píxeles propios
+        pixels: null,
       };
     }
-
     function createDefaultFrame() {
       return { layers: [createEmptyLayer('Capa 1')] };
     }
-
     function clonePixels(pixels) {
       return pixels.map(row => [...row]);
     }
-
     function cloneFrame(frame) {
       return {
         layers: frame.layers.map(layer => {
@@ -638,28 +619,23 @@
         })
       };
     }
-
     function getActiveLayer() {
       const frame = state.frames[state.currentFrameIndex];
       if (!frame) return null;
       return frame.layers[state.currentLayerIndex] || null;
     }
-
     function getPixel(row, col) {
       const layer = getActiveLayer();
       if (!layer || layer.type === 'adjustment') return null;
       if (row < 0 || row >= SIZE || col < 0 || col >= SIZE) return null;
       return layer.pixels[row][col];
     }
-
     function setPixel(row, col, color) {
       const layer = getActiveLayer();
       if (!layer || layer.type === 'adjustment') return;
       if (row < 0 || row >= SIZE || col < 0 || col >= SIZE) return;
       layer.pixels[row][col] = color;
     }
-
-    // Dibujar con tamaño de pincel (cuadrado centrado)
     function drawBrush(row, col, color) {
       const half = Math.floor(state.brushSize / 2);
       for (let dr = -half; dr <= half; dr++) {
@@ -669,34 +645,20 @@
             if (dr === -half && dc === -half) continue;
           }
           setPixel(r, c, color);
-          // Simetría horizontal
-          if (state.symmetryH) {
-            const symR = row - dr;
-            setPixel(symR, c, color);
-          }
-          // Simetría vertical
-          if (state.symmetryV) {
-            const symC = col - dc;
-            setPixel(r, symC, color);
-          }
+          if (state.symmetryH) { const symR = row - dr; setPixel(symR, c, color); }
+          if (state.symmetryV) { const symC = col - dc; setPixel(r, symC, color); }
           if (state.symmetryH && state.symmetryV) {
-            const symR = row - dr;
-            const symC = col - dc;
+            const symR = row - dr, symC = col - dc;
             setPixel(symR, symC, color);
           }
         }
       }
     }
-
-    // Interpolación de líneas (algoritmo de Bresenham simplificado)
     function drawLine(r1, c1, r2, c2, color) {
       const dr = Math.abs(r2 - r1);
       const dc = Math.abs(c2 - c1);
       const steps = Math.max(dr, dc);
-      if (steps === 0) {
-        drawBrush(r1, c1, color);
-        return;
-      }
+      if (steps === 0) { drawBrush(r1, c1, color); return; }
       for (let i = 0; i <= steps; i++) {
         const t = i / steps;
         const r = Math.round(r1 + (r2 - r1) * t);
@@ -704,48 +666,37 @@
         drawBrush(r, c, color);
       }
     }
-
-    // -------- HISTORIAL --------
-    function saveHistory() {
-      const snapshot = state.frames.map(frame => cloneFrame(frame));
-      if (state.historyIndex < state.history.length - 1) {
-        state.history = state.history.slice(0, state.historyIndex + 1);
+    function hexToRgb(hex) {
+      const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+      return result ? [ parseInt(result[1],16), parseInt(result[2],16), parseInt(result[3],16) ] : [0,0,0];
+    }
+    function rgbToHex(r,g,b) {
+      return '#' + [r,g,b].map(c => c.toString(16).padStart(2,'0')).join('');
+    }
+    function applyAdjustment(pixels, type, params) {
+      const result = pixels.map(row => [...row]);
+      for (let r = 0; r < SIZE; r++) {
+        for (let c = 0; c < SIZE; c++) {
+          const color = result[r][c];
+          if (color === null) continue;
+          let [R, G, B] = hexToRgb(color);
+          switch (type) {
+            case 'brightness': { const amt = params.amount || 30; R=Math.min(255,Math.max(0,R+amt)); G=Math.min(255,Math.max(0,G+amt)); B=Math.min(255,Math.max(0,B+amt)); break; }
+            case 'contrast': { const f = params.factor || 1.5; const avg=128; R=Math.min(255,Math.max(0, avg+(R-avg)*f)); G=Math.min(255,Math.max(0, avg+(G-avg)*f)); B=Math.min(255,Math.max(0, avg+(B-avg)*f)); break; }
+            case 'saturation': { const s = params.saturation || 1.5; const gray=0.299*R+0.587*G+0.114*B; R=Math.min(255,Math.max(0, gray+(R-gray)*s)); G=Math.min(255,Math.max(0, gray+(G-gray)*s)); B=Math.min(255,Math.max(0, gray+(B-gray)*s)); break; }
+            case 'grayscale': { const gray=0.299*R+0.587*G+0.114*B; R=gray; G=gray; B=gray; break; }
+          }
+          result[r][c] = rgbToHex(Math.round(R), Math.round(G), Math.round(B));
+        }
       }
-      state.history.push(snapshot);
-      if (state.history.length > state.maxHistory) {
-        state.history.shift();
-      }
-      state.historyIndex = state.history.length - 1;
+      return result;
     }
 
-    function undo() {
-      if (state.historyIndex <= 0) return;
-      state.historyIndex--;
-      restoreSnapshot(state.history[state.historyIndex]);
-    }
-
-    function redo() {
-      if (state.historyIndex >= state.history.length - 1) return;
-      state.historyIndex++;
-      restoreSnapshot(state.history[state.historyIndex]);
-    }
-
-    function restoreSnapshot(snapshot) {
-      state.frames = snapshot.map(frame => cloneFrame(frame));
-      if (state.currentFrameIndex >= state.frames.length) state.currentFrameIndex = state.frames.length - 1;
-      if (state.currentLayerIndex >= state.frames[state.currentFrameIndex].layers.length) {
-        state.currentLayerIndex = state.frames[state.currentFrameIndex].layers.length - 1;
-      }
-      renderAll();
-    }
-
-    // -------- RENDERIZADO (con transparencia y capas de ajuste) --------
+    // -------- RENDERIZADO (igual que antes) --------
     function renderCanvas() {
       const frame = state.frames[state.currentFrameIndex];
       if (!frame) return;
-
       const w = canvas.width, h = canvas.height;
-      // Fondo de cuadrícula
       const tileSize = 8;
       ctx.fillStyle = '#333';
       ctx.fillRect(0, 0, w, h);
@@ -757,53 +708,33 @@
           }
         }
       }
-
-      // Composición con capas de ajuste
       const imageData = ctx.createImageData(SIZE, SIZE);
       const data = imageData.data;
-      // Inicializar con transparente
-      for (let i = 0; i < data.length; i += 4) {
-        data[i+3] = 0;
-      }
-
-      // Recorremos capas en orden, aplicando ajustes sobre el acumulado
+      for (let i = 0; i < data.length; i += 4) data[i+3] = 0;
       let composite = Array.from({ length: SIZE }, () => Array(SIZE).fill(null));
-
       for (const layer of frame.layers) {
         if (!layer.visible) continue;
-
         if (layer.type === 'normal') {
-          // Copiar píxeles de la capa normal al composite (solo si no hay ya un color)
           for (let r = 0; r < SIZE; r++) {
             for (let c = 0; c < SIZE; c++) {
               const color = layer.pixels[r][c];
-              if (color !== null && composite[r][c] === null) {
-                composite[r][c] = color;
-              }
+              if (color !== null && composite[r][c] === null) composite[r][c] = color;
             }
           }
-        } else if (layer.type === 'adjustment') {
-          // Aplicar ajuste sobre el composite actual
+        } else {
           composite = applyAdjustment(composite, layer.adjustmentType, layer.params);
         }
       }
-
-      // Rellenar ImageData con el composite
       for (let r = 0; r < SIZE; r++) {
         for (let c = 0; c < SIZE; c++) {
           const color = composite[r][c];
           if (color === null) continue;
           const idx = (r * SIZE + c) * 4;
           const [R, G, B] = hexToRgb(color);
-          data[idx] = R;
-          data[idx+1] = G;
-          data[idx+2] = B;
-          data[idx+3] = 255;
+          data[idx] = R; data[idx+1] = G; data[idx+2] = B; data[idx+3] = 255;
         }
       }
       ctx.putImageData(imageData, 0, 0);
-
-      // Dibujar selección si existe
       if (state.selection) {
         const { startRow, startCol, endRow, endCol } = state.selection;
         const r1 = Math.min(startRow, endRow);
@@ -816,71 +747,6 @@
       }
     }
 
-    // Aplicar ajuste a una matriz de píxeles (cada píxel es un string hex o null)
-    function applyAdjustment(pixels, type, params) {
-      const result = pixels.map(row => [...row]);
-      for (let r = 0; r < SIZE; r++) {
-        for (let c = 0; c < SIZE; c++) {
-          const color = result[r][c];
-          if (color === null) continue;
-          let [R, G, B] = hexToRgb(color);
-          switch (type) {
-            case 'brightness': {
-              const amount = params.amount || 30;
-              R = Math.min(255, Math.max(0, R + amount));
-              G = Math.min(255, Math.max(0, G + amount));
-              B = Math.min(255, Math.max(0, B + amount));
-              break;
-            }
-            case 'contrast': {
-              const factor = (params.factor || 1.5);
-              const avg = 128;
-              R = Math.min(255, Math.max(0, avg + (R - avg) * factor));
-              G = Math.min(255, Math.max(0, avg + (G - avg) * factor));
-              B = Math.min(255, Math.max(0, avg + (B - avg) * factor));
-              break;
-            }
-            case 'saturation': {
-              const sat = (params.saturation || 1.5);
-              const gray = 0.299 * R + 0.587 * G + 0.114 * B;
-              R = Math.min(255, Math.max(0, gray + (R - gray) * sat));
-              G = Math.min(255, Math.max(0, gray + (G - gray) * sat));
-              B = Math.min(255, Math.max(0, gray + (B - gray) * sat));
-              break;
-            }
-            case 'grayscale': {
-              const gray = 0.299 * R + 0.587 * G + 0.114 * B;
-              R = gray; G = gray; B = gray;
-              break;
-            }
-          }
-          result[r][c] = rgbToHex(Math.round(R), Math.round(G), Math.round(B));
-        }
-      }
-      return result;
-    }
-
-    function hexToRgb(hex) {
-      const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-      return result ? [
-        parseInt(result[1], 16),
-        parseInt(result[2], 16),
-        parseInt(result[3], 16)
-      ] : [0,0,0];
-    }
-
-    function rgbToHex(r,g,b) {
-      return '#' + [r,g,b].map(c => c.toString(16).padStart(2,'0')).join('');
-    }
-
-    function renderAll() {
-      renderCanvas();
-      renderLayers();
-      renderTimeline();
-      updateInfo();
-    }
-
-    // -------- CAPAS UI --------
     function renderLayers() {
       const frame = state.frames[state.currentFrameIndex];
       if (!frame) { layerListEl.innerHTML = ''; return; }
@@ -924,7 +790,6 @@
       });
     }
 
-    // -------- TIMELINE UI --------
     function renderTimeline() {
       if (!state.frames.length) { timelineEl.innerHTML = ''; return; }
       let html = '';
@@ -938,7 +803,6 @@
         `;
       });
       timelineEl.innerHTML = html;
-
       timelineEl.querySelectorAll('.frame-thumb').forEach(el => {
         const idx = parseInt(el.dataset.index);
         const miniCanvas = el.querySelector('canvas');
@@ -946,7 +810,6 @@
           const miniCtx = miniCanvas.getContext('2d');
           const frame = state.frames[idx];
           if (frame) {
-            // Fondo de cuadrícula
             const w = 32, h = 32;
             const tile = 4;
             miniCtx.fillStyle = '#333';
@@ -957,7 +820,6 @@
                 if ((Math.floor(x/tile)+Math.floor(y/tile))%2===0) miniCtx.fillRect(x,y,tile,tile);
               }
             }
-            // Composición rápida
             const imageData = miniCtx.createImageData(32,32);
             const data = imageData.data;
             for (let i=0; i<data.length; i+=4) data[i+3]=0;
@@ -1003,138 +865,95 @@
       });
     }
 
-    // -------- MANIPULACIÓN DE FRAMES --------
-    function addFrame() {
-      const newFrame = createDefaultFrame();
-      state.frames.push(newFrame);
-      state.currentFrameIndex = state.frames.length - 1;
-      state.currentLayerIndex = 0;
-      saveHistory();
-      renderAll();
+    function renderAll() {
+      renderCanvas();
+      renderLayers();
+      renderTimeline();
+      updateInfo();
     }
 
-    function duplicateFrame() {
-      if (!state.frames.length) return;
-      const src = state.frames[state.currentFrameIndex];
-      const newFrame = cloneFrame(src);
-      state.frames.push(newFrame);
-      state.currentFrameIndex = state.frames.length - 1;
-      state.currentLayerIndex = 0;
-      saveHistory();
-      renderAll();
-    }
-
-    function deleteFrame(index) {
-      if (state.frames.length <= 1) return;
-      state.frames.splice(index, 1);
-      if (state.currentFrameIndex >= state.frames.length) {
-        state.currentFrameIndex = state.frames.length - 1;
+    // -------- HISTORIAL Y MANIPULACIÓN (igual que antes) --------
+    function saveHistory() {
+      const snapshot = state.frames.map(frame => cloneFrame(frame));
+      if (state.historyIndex < state.history.length - 1) {
+        state.history = state.history.slice(0, state.historyIndex + 1);
       }
+      state.history.push(snapshot);
+      if (state.history.length > state.maxHistory) state.history.shift();
+      state.historyIndex = state.history.length - 1;
+    }
+    function undo() { if (state.historyIndex <= 0) return; state.historyIndex--; restoreSnapshot(state.history[state.historyIndex]); }
+    function redo() { if (state.historyIndex >= state.history.length - 1) return; state.historyIndex++; restoreSnapshot(state.history[state.historyIndex]); }
+    function restoreSnapshot(snapshot) {
+      state.frames = snapshot.map(frame => cloneFrame(frame));
+      if (state.currentFrameIndex >= state.frames.length) state.currentFrameIndex = state.frames.length - 1;
       if (state.currentLayerIndex >= state.frames[state.currentFrameIndex].layers.length) {
         state.currentLayerIndex = state.frames[state.currentFrameIndex].layers.length - 1;
       }
-      saveHistory();
       renderAll();
     }
 
-    // -------- MANIPULACIÓN DE CAPAS --------
-    function addLayer() {
-      const frame = state.frames[state.currentFrameIndex];
-      if (!frame) return;
-      const name = `Capa ${frame.layers.filter(l => l.type === 'normal').length + 1}`;
-      frame.layers.push(createEmptyLayer(name));
-      state.currentLayerIndex = frame.layers.length - 1;
-      saveHistory();
-      renderAll();
-    }
+    // -------- FRAMES Y CAPAS (igual que antes) --------
+    function addFrame() { const newFrame = createDefaultFrame(); state.frames.push(newFrame); state.currentFrameIndex = state.frames.length - 1; state.currentLayerIndex = 0; saveHistory(); renderAll(); }
+    function duplicateFrame() { if (!state.frames.length) return; const src = state.frames[state.currentFrameIndex]; const newFrame = cloneFrame(src); state.frames.push(newFrame); state.currentFrameIndex = state.frames.length - 1; state.currentLayerIndex = 0; saveHistory(); renderAll(); }
+    function deleteFrame(index) { if (state.frames.length <= 1) return; state.frames.splice(index, 1); if (state.currentFrameIndex >= state.frames.length) state.currentFrameIndex = state.frames.length - 1; if (state.currentLayerIndex >= state.frames[state.currentFrameIndex].layers.length) state.currentLayerIndex = state.frames[state.currentFrameIndex].layers.length - 1; saveHistory(); renderAll(); }
+    function addLayer() { const frame = state.frames[state.currentFrameIndex]; if (!frame) return; const name = `Capa ${frame.layers.filter(l => l.type === 'normal').length + 1}`; frame.layers.push(createEmptyLayer(name)); state.currentLayerIndex = frame.layers.length - 1; saveHistory(); renderAll(); }
+    function addAdjustmentLayer(type) { const frame = state.frames[state.currentFrameIndex]; if (!frame) return; const layer = createAdjustmentLayer(type); if (type === 'brightness') layer.params = { amount: 30 }; else if (type === 'contrast') layer.params = { factor: 1.5 }; else if (type === 'saturation') layer.params = { saturation: 1.5 }; else if (type === 'grayscale') layer.params = {}; frame.layers.push(layer); state.currentLayerIndex = frame.layers.length - 1; saveHistory(); renderAll(); }
+    function duplicateLayer() { const frame = state.frames[state.currentFrameIndex]; if (!frame || !frame.layers.length) return; const src = frame.layers[state.currentLayerIndex]; let newLayer; if (src.type === 'adjustment') { newLayer = { ...src, name: src.name + ' copia', params: { ...src.params } }; } else { const newPixels = clonePixels(src.pixels); newLayer = { name: src.name + ' copia', visible: src.visible, pixels: newPixels, type: 'normal' }; } frame.layers.splice(state.currentLayerIndex + 1, 0, newLayer); state.currentLayerIndex = state.currentLayerIndex + 1; saveHistory(); renderAll(); }
+    function deleteLayer(index) { const frame = state.frames[state.currentFrameIndex]; if (!frame || frame.layers.length <= 1) return; frame.layers.splice(index, 1); if (state.currentLayerIndex >= frame.layers.length) state.currentLayerIndex = frame.layers.length - 1; saveHistory(); renderAll(); }
+    function mergeVisibleLayers() { const frame = state.frames[state.currentFrameIndex]; if (!frame) return; const visible = frame.layers.filter(l => l.visible && l.type === 'normal'); if (visible.length <= 1) return; const merged = Array.from({ length: SIZE }, () => Array(SIZE).fill(null)); for (const layer of visible) { for (let r=0; r<SIZE; r++) { for (let c=0; c<SIZE; c++) { const color = layer.pixels[r][c]; if (color !== null) merged[r][c] = color; } } } const newLayers = frame.layers.filter(l => !l.visible || l.type === 'adjustment'); newLayers.push({ name: 'Fusionada', visible: true, pixels: merged, type: 'normal' }); frame.layers = newLayers; state.currentLayerIndex = frame.layers.length - 1; saveHistory(); renderAll(); }
+    function moveLayerUp() { const frame = state.frames[state.currentFrameIndex]; if (!frame) return; const idx = state.currentLayerIndex; if (idx >= frame.layers.length - 1) return; [frame.layers[idx], frame.layers[idx+1]] = [frame.layers[idx+1], frame.layers[idx]]; state.currentLayerIndex = idx + 1; renderAll(); }
+    function moveLayerDown() { const frame = state.frames[state.currentFrameIndex]; if (!frame) return; const idx = state.currentLayerIndex; if (idx <= 0) return; [frame.layers[idx], frame.layers[idx-1]] = [frame.layers[idx-1], frame.layers[idx]]; state.currentLayerIndex = idx - 1; renderAll(); }
 
-    function addAdjustmentLayer(type) {
-      const frame = state.frames[state.currentFrameIndex];
-      if (!frame) return;
-      const layer = createAdjustmentLayer(type);
-      // Parámetros por defecto
-      if (type === 'brightness') layer.params = { amount: 30 };
-      else if (type === 'contrast') layer.params = { factor: 1.5 };
-      else if (type === 'saturation') layer.params = { saturation: 1.5 };
-      else if (type === 'grayscale') layer.params = {};
-      frame.layers.push(layer);
-      state.currentLayerIndex = frame.layers.length - 1;
-      saveHistory();
-      renderAll();
-    }
+    // -------- SELECCIÓN, COPIA, PEGADO (igual que antes) --------
+    function startSelection(row, col) { state.selection = { startRow: row, startCol: col, endRow: row, endCol: col }; state.isDraggingSelection = false; }
+    function updateSelection(row, col) { if (!state.selection) return; state.selection.endRow = Math.min(Math.max(row, 0), SIZE-1); state.selection.endCol = Math.min(Math.max(col, 0), SIZE-1); renderCanvas(); const { startRow, startCol, endRow, endCol } = state.selection; const r1 = Math.min(startRow, endRow), r2 = Math.max(startRow, endRow), c1 = Math.min(startCol, endCol), c2 = Math.max(startCol, endCol); ctx.strokeStyle = '#00ffff'; ctx.lineWidth = 2; ctx.strokeRect(c1, r1, c2-c1+1, r2-r1+1); }
+    function finishSelection() { if (!state.selection) return; const layer = getActiveLayer(); if (!layer || layer.type === 'adjustment') { state.selection = null; renderAll(); return; } const { startRow, startCol, endRow, endCol } = state.selection; const r1 = Math.min(startRow, endRow), r2 = Math.max(startRow, endRow), c1 = Math.min(startCol, endCol), c2 = Math.max(startCol, endCol); const w = c2 - c1 + 1, h = r2 - r1 + 1; const pixels = Array.from({ length: h }, (_, i) => Array.from({ length: w }, (_, j) => layer.pixels[r1 + i][c1 + j])); state.clipboard = { pixels, row: r1, col: c1, w, h }; state.selection.fixed = true; renderAll(); }
+    function startDragSelection(row, col) { if (!state.selection) return false; const { startRow, startCol, endRow, endCol } = state.selection; const r1 = Math.min(startRow, endRow), r2 = Math.max(startRow, endRow), c1 = Math.min(startCol, endCol), c2 = Math.max(startCol, endCol); if (row >= r1 && row <= r2 && col >= c1 && col <= c2) { state.isDraggingSelection = true; state.dragOffset = { row: row - r1, col: col - c1 }; return true; } return false; }
+    function dragSelection(row, col) { if (!state.isDraggingSelection || !state.selection || !state.clipboard) return; const { startRow, startCol, endRow, endCol } = state.selection; const r1 = Math.min(startRow, endRow), r2 = Math.max(startRow, endRow), c1 = Math.min(startCol, endCol), c2 = Math.max(startCol, endCol); const w = c2 - c1 + 1, h = r2 - r1 + 1; let newRow = row - state.dragOffset.row, newCol = col - state.dragOffset.col; newRow = Math.min(Math.max(newRow, 0), SIZE - h); newCol = Math.min(Math.max(newCol, 0), SIZE - w); const layer = getActiveLayer(); if (!layer || layer.type === 'adjustment') return; for (let r = r1; r <= r2; r++) { for (let c = c1; c <= c2; c++) { layer.pixels[r][c] = null; } } for (let r = 0; r < h; r++) { for (let c = 0; c < w; c++) { const srcColor = state.clipboard.pixels[r][c]; if (srcColor !== null) { const destR = newRow + r, destC = newCol + c; if (destR >= 0 && destR < SIZE && destC >= 0 && destC < SIZE) { layer.pixels[destR][destC] = srcColor; } } } } state.selection.startRow = newRow; state.selection.startCol = newCol; state.selection.endRow = newRow + h - 1; state.selection.endCol = newCol + w - 1; state.clipboard.row = newRow; state.clipboard.col = newCol; saveHistory(); renderAll(); }
+    function endDragSelection() { state.isDraggingSelection = false; state.dragOffset = null; }
+    function copySelection() { if (!state.clipboard) return; }
+    function pasteClipboard() { if (!state.clipboard) return; const { pixels, row, col, w, h } = state.clipboard; const frame = state.frames[state.currentFrameIndex]; if (!frame) return; const newLayer = createEmptyLayer('Pegado'); for (let r = 0; r < h; r++) { for (let c = 0; c < w; c++) { const pr = row + r, pc = col + c; if (pr < 0 || pr >= SIZE || pc < 0 || pc >= SIZE) continue; newLayer.pixels[pr][pc] = pixels[r][c]; } } frame.layers.push(newLayer); state.currentLayerIndex = frame.layers.length - 1; saveHistory(); renderAll(); }
+    function clearSelection() { state.selection = null; state.isDraggingSelection = false; renderAll(); }
 
-    function duplicateLayer() {
-      const frame = state.frames[state.currentFrameIndex];
-      if (!frame || !frame.layers.length) return;
-      const src = frame.layers[state.currentLayerIndex];
-      let newLayer;
-      if (src.type === 'adjustment') {
-        newLayer = { ...src, name: src.name + ' copia', params: { ...src.params } };
-      } else {
-        const newPixels = clonePixels(src.pixels);
-        newLayer = { name: src.name + ' copia', visible: src.visible, pixels: newPixels, type: 'normal' };
-      }
-      frame.layers.splice(state.currentLayerIndex + 1, 0, newLayer);
-      state.currentLayerIndex = state.currentLayerIndex + 1;
-      saveHistory();
-      renderAll();
+    // -------- HERRAMIENTAS Y EVENTOS DEL CANVAS (igual que antes) --------
+    function getGridCoords(e) {
+      const rect = canvas.getBoundingClientRect();
+      const scaleX = canvas.width / rect.width;
+      const scaleY = canvas.height / rect.height;
+      const x = (e.clientX - rect.left) * scaleX;
+      const y = (e.clientY - rect.top) * scaleY;
+      return { row: Math.floor(y), col: Math.floor(x) };
     }
-
-    function deleteLayer(index) {
-      const frame = state.frames[state.currentFrameIndex];
-      if (!frame || frame.layers.length <= 1) return;
-      frame.layers.splice(index, 1);
-      if (state.currentLayerIndex >= frame.layers.length) {
-        state.currentLayerIndex = frame.layers.length - 1;
-      }
-      saveHistory();
-      renderAll();
+    let isDrawing = false, lastPenPoint = null;
+    function handleCanvasDown(e) {
+      const { row, col } = getGridCoords(e);
+      if (row < 0 || row >= SIZE || col < 0 || col >= SIZE) return;
+      const tool = state.tool;
+      if (tool === 'select' && state.selection && state.selection.fixed) { if (startDragSelection(row, col)) return; }
+      if (tool === 'select') { startSelection(row, col); return; }
+      if (tool === 'pen') { state.isPenDrawing = true; lastPenPoint = { row, col }; drawBrush(row, col, state.color); saveHistory(); renderAll(); return; }
+      if (tool === 'pencil' || tool === 'eraser') { isDrawing = true; const color = tool === 'pencil' ? state.color : null; drawBrush(row, col, color); saveHistory(); renderAll(); }
+      else if (tool === 'fill') { const target = getPixel(row, col); if (target !== state.color) { floodFill(row, col, target, state.color); saveHistory(); renderAll(); } }
+      else if (tool === 'picker') { const color = getPixel(row, col); if (color !== null) { state.color = color; customColorInput.value = color; updatePaletteSelection(); renderAll(); } }
     }
-
-    function mergeVisibleLayers() {
-      const frame = state.frames[state.currentFrameIndex];
-      if (!frame) return;
-      const visible = frame.layers.filter(l => l.visible && l.type === 'normal');
-      if (visible.length <= 1) return;
-      const merged = Array.from({ length: SIZE }, () => Array(SIZE).fill(null));
-      for (const layer of visible) {
-        for (let r=0; r<SIZE; r++) {
-          for (let c=0; c<SIZE; c++) {
-            const color = layer.pixels[r][c];
-            if (color !== null) merged[r][c] = color;
-          }
-        }
-      }
-      // Conservar capas de ajuste y las normales no visibles
-      const newLayers = frame.layers.filter(l => !l.visible || l.type === 'adjustment');
-      newLayers.push({ name: 'Fusionada', visible: true, pixels: merged, type: 'normal' });
-      frame.layers = newLayers;
-      state.currentLayerIndex = frame.layers.length - 1;
-      saveHistory();
-      renderAll();
+    function handleCanvasMove(e) {
+      const { row, col } = getGridCoords(e);
+      if (row < 0 || row >= SIZE || col < 0 || col >= SIZE) { infoCoords.textContent = '(--,-- )'; return; }
+      infoCoords.textContent = `(${row},${col})`;
+      const color = getPixel(row, col);
+      infoColor.textContent = color || 'transparente';
+      infoColor.style.color = color || '#888';
+      if (state.isDraggingSelection) { dragSelection(row, col); return; }
+      if (state.tool === 'select' && state.selection && !state.selection.fixed) { updateSelection(row, col); return; }
+      if (state.isPenDrawing && state.tool === 'pen') { if (lastPenPoint) { drawLine(lastPenPoint.row, lastPenPoint.col, row, col, state.color); lastPenPoint = { row, col }; saveHistory(); renderAll(); } return; }
+      if (isDrawing && (state.tool === 'pencil' || state.tool === 'eraser')) { const color2 = state.tool === 'pencil' ? state.color : null; drawBrush(row, col, color2); saveHistory(); renderAll(); }
     }
-
-    function moveLayerUp() {
-      const frame = state.frames[state.currentFrameIndex];
-      if (!frame) return;
-      const idx = state.currentLayerIndex;
-      if (idx >= frame.layers.length - 1) return;
-      [frame.layers[idx], frame.layers[idx+1]] = [frame.layers[idx+1], frame.layers[idx]];
-      state.currentLayerIndex = idx + 1;
-      renderAll();
+    function handleCanvasUp(e) {
+      if (state.tool === 'select' && state.selection && !state.selection.fixed) { finishSelection(); }
+      if (state.isDraggingSelection) { endDragSelection(); }
+      isDrawing = false; state.isPenDrawing = false; lastPenPoint = null;
     }
-
-    function moveLayerDown() {
-      const frame = state.frames[state.currentFrameIndex];
-      if (!frame) return;
-      const idx = state.currentLayerIndex;
-      if (idx <= 0) return;
-      [frame.layers[idx], frame.layers[idx-1]] = [frame.layers[idx-1], frame.layers[idx]];
-      state.currentLayerIndex = idx - 1;
-      renderAll();
-    }
-
-    // -------- HERRAMIENTAS DE DIBUJO --------
     function floodFill(row, col, targetColor, fillColor) {
       const layer = getActiveLayer();
       if (!layer || layer.type === 'adjustment') return;
@@ -1154,347 +973,16 @@
       }
     }
 
-    // -------- SELECCIÓN Y ARRASTRE --------
-    function startSelection(row, col) {
-      state.selection = { startRow: row, startCol: col, endRow: row, endCol: col };
-      state.isDraggingSelection = false;
-    }
-
-    function updateSelection(row, col) {
-      if (!state.selection) return;
-      state.selection.endRow = Math.min(Math.max(row, 0), SIZE-1);
-      state.selection.endCol = Math.min(Math.max(col, 0), SIZE-1);
-      renderCanvas();
-      // Dibujar rectángulo de selección
-      const { startRow, startCol, endRow, endCol } = state.selection;
-      const r1 = Math.min(startRow, endRow);
-      const r2 = Math.max(startRow, endRow);
-      const c1 = Math.min(startCol, endCol);
-      const c2 = Math.max(startCol, endCol);
-      ctx.strokeStyle = '#00ffff';
-      ctx.lineWidth = 2;
-      ctx.strokeRect(c1, r1, c2-c1+1, r2-r1+1);
-    }
-
-    function finishSelection() {
-      if (!state.selection) return;
-      // Guardar los píxeles seleccionados (desde la capa activa, o composite?)
-      // Usaremos la capa activa si es normal, sino no se puede seleccionar.
-      const layer = getActiveLayer();
-      if (!layer || layer.type === 'adjustment') {
-        state.selection = null;
-        renderAll();
-        return;
-      }
-      const { startRow, startCol, endRow, endCol } = state.selection;
-      const r1 = Math.min(startRow, endRow);
-      const r2 = Math.max(startRow, endRow);
-      const c1 = Math.min(startCol, endCol);
-      const c2 = Math.max(startCol, endCol);
-      const w = c2 - c1 + 1;
-      const h = r2 - r1 + 1;
-      const pixels = Array.from({ length: h }, (_, i) =>
-        Array.from({ length: w }, (_, j) => layer.pixels[r1 + i][c1 + j])
-      );
-      state.clipboard = { pixels, row: r1, col: c1, w, h };
-      // No limpiar la selección, la dejamos visible para poder arrastrar
-      // Pero añadimos un flag para saber que ya está fija
-      state.selection.fixed = true;
-      renderAll();
-    }
-
-    // Mover selección (arrastrar)
-    function startDragSelection(row, col) {
-      if (!state.selection) return false;
-      const { startRow, startCol, endRow, endCol } = state.selection;
-      const r1 = Math.min(startRow, endRow);
-      const r2 = Math.max(startRow, endRow);
-      const c1 = Math.min(startCol, endCol);
-      const c2 = Math.max(startCol, endCol);
-      if (row >= r1 && row <= r2 && col >= c1 && col <= c2) {
-        state.isDraggingSelection = true;
-        state.dragOffset = { row: row - r1, col: col - c1 };
-        return true;
-      }
-      return false;
-    }
-
-    function dragSelection(row, col) {
-      if (!state.isDraggingSelection || !state.selection || !state.clipboard) return;
-      const { startRow, startCol, endRow, endCol } = state.selection;
-      const r1 = Math.min(startRow, endRow);
-      const r2 = Math.max(startRow, endRow);
-      const c1 = Math.min(startCol, endCol);
-      const c2 = Math.max(startCol, endCol);
-      const w = c2 - c1 + 1;
-      const h = r2 - r1 + 1;
-      // Nueva posición (esquina superior izquierda)
-      let newRow = row - state.dragOffset.row;
-      let newCol = col - state.dragOffset.col;
-      // Limitar dentro del canvas
-      newRow = Math.min(Math.max(newRow, 0), SIZE - h);
-      newCol = Math.min(Math.max(newCol, 0), SIZE - w);
-      // Borrar área anterior en la capa activa (si es normal)
-      const layer = getActiveLayer();
-      if (!layer || layer.type === 'adjustment') return;
-      // Poner transparente en el área anterior
-      for (let r = r1; r <= r2; r++) {
-        for (let c = c1; c <= c2; c++) {
-          layer.pixels[r][c] = null;
-        }
-      }
-      // Copiar los píxeles del portapapeles en la nueva posición
-      for (let r = 0; r < h; r++) {
-        for (let c = 0; c < w; c++) {
-          const srcColor = state.clipboard.pixels[r][c];
-          if (srcColor !== null) {
-            const destR = newRow + r;
-            const destC = newCol + c;
-            if (destR >= 0 && destR < SIZE && destC >= 0 && destC < SIZE) {
-              layer.pixels[destR][destC] = srcColor;
-            }
-          }
-        }
-      }
-      // Actualizar selección y portapapeles con nueva posición
-      state.selection.startRow = newRow;
-      state.selection.startCol = newCol;
-      state.selection.endRow = newRow + h - 1;
-      state.selection.endCol = newCol + w - 1;
-      state.clipboard.row = newRow;
-      state.clipboard.col = newCol;
-      saveHistory();
-      renderAll();
-    }
-
-    function endDragSelection() {
-      state.isDraggingSelection = false;
-      state.dragOffset = null;
-    }
-
-    // Copiar selección (ya está en clipboard)
-    function copySelection() {
-      if (!state.clipboard) return;
-      // Ya está
-    }
-
-    // Pegar en nueva capa
-    function pasteClipboard() {
-      if (!state.clipboard) return;
-      const { pixels, row, col, w, h } = state.clipboard;
-      const frame = state.frames[state.currentFrameIndex];
-      if (!frame) return;
-      const newLayer = createEmptyLayer('Pegado');
-      for (let r = 0; r < h; r++) {
-        for (let c = 0; c < w; c++) {
-          const pr = row + r, pc = col + c;
-          if (pr < 0 || pr >= SIZE || pc < 0 || pc >= SIZE) continue;
-          newLayer.pixels[pr][pc] = pixels[r][c];
-        }
-      }
-      frame.layers.push(newLayer);
-      state.currentLayerIndex = frame.layers.length - 1;
-      saveHistory();
-      renderAll();
-    }
-
-    function clearSelection() {
-      state.selection = null;
-      state.isDraggingSelection = false;
-      renderAll();
-    }
-
-    // -------- EVENTOS DEL CANVAS --------
-    function getGridCoords(e) {
-      const rect = canvas.getBoundingClientRect();
-      const scaleX = canvas.width / rect.width;
-      const scaleY = canvas.height / rect.height;
-      const x = (e.clientX - rect.left) * scaleX;
-      const y = (e.clientY - rect.top) * scaleY;
-      const col = Math.floor(x);
-      const row = Math.floor(y);
-      return { row, col };
-    }
-
-    let isDrawing = false;
-    let lastPenPoint = null;
-
-    function handleCanvasDown(e) {
-      const { row, col } = getGridCoords(e);
-      if (row < 0 || row >= SIZE || col < 0 || col >= SIZE) return;
-      const tool = state.tool;
-
-      // Si hay selección y estamos dentro, iniciar arrastre
-      if (tool === 'select' && state.selection && state.selection.fixed) {
-        if (startDragSelection(row, col)) {
-          return;
-        }
-      }
-
-      if (tool === 'select') {
-        startSelection(row, col);
-        return;
-      }
-
-      if (tool === 'pen') {
-        state.isPenDrawing = true;
-        lastPenPoint = { row, col };
-        const color = state.color;
-        drawBrush(row, col, color);
-        saveHistory();
-        renderAll();
-        return;
-      }
-
-      if (tool === 'pencil' || tool === 'eraser') {
-        isDrawing = true;
-        const color = tool === 'pencil' ? state.color : null;
-        drawBrush(row, col, color);
-        saveHistory();
-        renderAll();
-      } else if (tool === 'fill') {
-        const target = getPixel(row, col);
-        if (target !== state.color) {
-          floodFill(row, col, target, state.color);
-          saveHistory();
-          renderAll();
-        }
-      } else if (tool === 'picker') {
-        const color = getPixel(row, col);
-        if (color !== null) {
-          state.color = color;
-          customColorInput.value = color;
-          updatePaletteSelection();
-          renderAll();
-        }
-      }
-    }
-
-    function handleCanvasMove(e) {
-      const { row, col } = getGridCoords(e);
-      if (row < 0 || row >= SIZE || col < 0 || col >= SIZE) {
-        infoCoords.textContent = '(--,-- )';
-        return;
-      }
-      infoCoords.textContent = `(${row},${col})`;
-      const color = getPixel(row, col);
-      infoColor.textContent = color || 'transparente';
-      infoColor.style.color = color || '#888';
-
-      // Arrastre de selección
-      if (state.isDraggingSelection) {
-        dragSelection(row, col);
-        return;
-      }
-
-      // Actualizar selección si está en curso
-      if (state.tool === 'select' && state.selection && !state.selection.fixed) {
-        updateSelection(row, col);
-        return;
-      }
-
-      // Lapicera: dibujo continuo
-      if (state.isPenDrawing && state.tool === 'pen') {
-        if (lastPenPoint) {
-          drawLine(lastPenPoint.row, lastPenPoint.col, row, col, state.color);
-          lastPenPoint = { row, col };
-          saveHistory();
-          renderAll();
-        }
-        return;
-      }
-
-      // Dibujo con lápiz/borrador si está presionado
-      if (isDrawing && (state.tool === 'pencil' || state.tool === 'eraser')) {
-        const color2 = state.tool === 'pencil' ? state.color : null;
-        drawBrush(row, col, color2);
-        saveHistory();
-        renderAll();
-      }
-    }
-
-    function handleCanvasUp(e) {
-      if (state.tool === 'select' && state.selection && !state.selection.fixed) {
-        finishSelection();
-      }
-      if (state.isDraggingSelection) {
-        endDragSelection();
-      }
-      isDrawing = false;
-      state.isPenDrawing = false;
-      lastPenPoint = null;
-    }
-
-    // -------- PALETA --------
-    function renderPalette() {
-      let html = '';
-      PALETTE.forEach(c => {
-        const sel = c === state.color ? 'selected' : '';
-        html += `<div class="color-swatch ${sel}" style="background:${c}" data-color="${c}"></div>`;
-      });
-      paletteEl.innerHTML = html;
-      paletteEl.querySelectorAll('.color-swatch').forEach(el => {
-        el.addEventListener('click', () => {
-          state.color = el.dataset.color;
-          customColorInput.value = state.color;
-          updatePaletteSelection();
-          renderAll();
-        });
-      });
-    }
-
-    function updatePaletteSelection() {
-      paletteEl.querySelectorAll('.color-swatch').forEach(el => {
-        el.classList.toggle('selected', el.dataset.color === state.color);
-      });
-    }
-
-    // -------- HERRAMIENTAS UI --------
-    function setupTools() {
-      document.querySelectorAll('#toolGroup button').forEach(btn => {
-        btn.addEventListener('click', () => {
-          document.querySelectorAll('#toolGroup button').forEach(b => b.classList.remove('active'));
-          btn.classList.add('active');
-          state.tool = btn.dataset.tool;
-          if (state.tool !== 'select') {
-            state.selection = null;
-            state.isDraggingSelection = false;
-          }
-          renderAll();
-        });
-      });
-    }
-
-    // -------- TAMAÑO PINCEL --------
-    function setupBrushSize() {
-      document.querySelectorAll('.brush-size button').forEach(btn => {
-        btn.addEventListener('click', () => {
-          document.querySelectorAll('.brush-size button').forEach(b => b.classList.remove('active-brush'));
-          btn.classList.add('active-brush');
-          state.brushSize = parseInt(btn.dataset.size);
-        });
-      });
-    }
-
-    // -------- SIMETRÍA --------
-    symmetryHCheck.addEventListener('change', () => {
-      state.symmetryH = symmetryHCheck.checked;
-    });
-    symmetryVCheck.addEventListener('change', () => {
-      state.symmetryV = symmetryVCheck.checked;
-    });
-
-    // -------- EXPORTAR PNG (con transparencia) --------
+    // -------- EXPORTACIONES LOCALES (PNG, GIF con gif.js) --------
     function exportPNG() {
       const frame = state.frames[state.currentFrameIndex];
       if (!frame) return;
       const tempCanvas = document.createElement('canvas');
-      tempCanvas.width = SIZE;
-      tempCanvas.height = SIZE;
+      tempCanvas.width = SIZE; tempCanvas.height = SIZE;
       const tCtx = tempCanvas.getContext('2d');
       const imageData = tCtx.createImageData(SIZE, SIZE);
       const data = imageData.data;
-      for (let i = 0; i < data.length; i += 4) data[i+3] = 0;
+      for (let i=0; i<data.length; i+=4) data[i+3]=0;
       let composite = Array.from({ length: SIZE }, () => Array(SIZE).fill(null));
       for (const layer of frame.layers) {
         if (!layer.visible) continue;
@@ -1525,18 +1013,13 @@
       link.click();
     }
 
-    // -------- EXPORTAR GIF (con transparencia) --------
-    function exportGIF() {
-      if (typeof GIF === 'undefined') {
-        alert('Librería gif.js no cargada.');
-        return;
-      }
+    function exportGIFLocal() {
+      if (typeof GIF === 'undefined') { alert('Librería gif.js no cargada.'); return; }
       if (!state.frames.length) return;
       const gif = new GIF({ workers: 2, quality: 10, width: SIZE, height: SIZE });
       state.frames.forEach((frame) => {
         const tempCanvas = document.createElement('canvas');
-        tempCanvas.width = SIZE;
-        tempCanvas.height = SIZE;
+        tempCanvas.width = SIZE; tempCanvas.height = SIZE;
         const tCtx = tempCanvas.getContext('2d');
         const imageData = tCtx.createImageData(SIZE, SIZE);
         const data = imageData.data;
@@ -1576,121 +1059,82 @@
       gif.render();
     }
 
-    // -------- EXPORTAR SPRITE SHEET --------
-    function exportSpriteSheet() {
+    // -------- EXPORTACIÓN CON BACKEND (GIF y SPRITE) --------
+    async function exportGIFServer() {
+      if (!state.frames.length) return;
+      const data = {
+        frames: state.frames.map(frame => ({
+          layers: frame.layers.map(layer => {
+            if (layer.type === 'adjustment') {
+              return { type: 'adjustment', adjustmentType: layer.adjustmentType, params: layer.params, visible: layer.visible };
+            } else {
+              return { type: 'normal', pixels: layer.pixels, visible: layer.visible };
+            }
+          })
+        })),
+        size: SIZE,
+        delay: state.speed
+      };
+      try {
+        const response = await fetch(`${BACKEND_URL}/api/export-gif`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        });
+        if (!response.ok) throw new Error('Error en el servidor');
+        const blob = await response.blob();
+        const link = document.createElement('a');
+        link.download = 'animation_server.gif';
+        link.href = URL.createObjectURL(blob);
+        link.click();
+      } catch (err) {
+        alert('Error al exportar GIF desde el servidor: ' + err.message);
+      }
+    }
+
+    async function exportSpriteServer() {
       if (!state.frames.length) return;
       const cols = parseInt(spriteColsInput.value) || 4;
-      const rows = Math.ceil(state.frames.length / cols);
-      const spriteSize = SIZE;
-      const sheetCanvas = document.createElement('canvas');
-      sheetCanvas.width = cols * spriteSize;
-      sheetCanvas.height = rows * spriteSize;
-      const sCtx = sheetCanvas.getContext('2d');
-
-      state.frames.forEach((frame, idx) => {
-        const col = idx % cols;
-        const row = Math.floor(idx / cols);
-        // Renderizar frame en un canvas temporal
-        const tempCanvas = document.createElement('canvas');
-        tempCanvas.width = SIZE;
-        tempCanvas.height = SIZE;
-        const tCtx = tempCanvas.getContext('2d');
-        const imageData = tCtx.createImageData(SIZE, SIZE);
-        const data = imageData.data;
-        for (let i=0; i<data.length; i+=4) data[i+3]=0;
-        let composite = Array.from({ length: SIZE }, () => Array(SIZE).fill(null));
-        for (const layer of frame.layers) {
-          if (!layer.visible) continue;
-          if (layer.type === 'normal') {
-            for (let r=0; r<SIZE; r++) {
-              for (let c=0; c<SIZE; c++) {
-                const color = layer.pixels[r][c];
-                if (color !== null && composite[r][c] === null) composite[r][c] = color;
-              }
+      const data = {
+        frames: state.frames.map(frame => ({
+          layers: frame.layers.map(layer => {
+            if (layer.type === 'adjustment') {
+              return { type: 'adjustment', adjustmentType: layer.adjustmentType, params: layer.params, visible: layer.visible };
+            } else {
+              return { type: 'normal', pixels: layer.pixels, visible: layer.visible };
             }
-          } else {
-            composite = applyAdjustment(composite, layer.adjustmentType, layer.params);
-          }
-        }
-        for (let r=0; r<SIZE; r++) {
-          for (let c=0; c<SIZE; c++) {
-            const color = composite[r][c];
-            if (color === null) continue;
-            const idx2 = (r*SIZE+c)*4;
-            const [R,G,B] = hexToRgb(color);
-            data[idx2] = R; data[idx2+1]=G; data[idx2+2]=B; data[idx2+3]=255;
-          }
-        }
-        tCtx.putImageData(imageData, 0, 0);
-        // Dibujar en el sprite sheet
-        sCtx.drawImage(tempCanvas, col * spriteSize, row * spriteSize);
-      });
-
-      const link = document.createElement('a');
-      link.download = 'pixelforge_sprite_sheet.png';
-      link.href = sheetCanvas.toDataURL('image/png');
-      link.click();
-    }
-
-    // -------- IMPORTAR IMAGEN --------
-    function importImage(file) {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        const img = new Image();
-        img.onload = () => {
-          const frame = state.frames[state.currentFrameIndex];
-          if (!frame) return;
-          const layer = getActiveLayer();
-          if (!layer || layer.type === 'adjustment') return;
-          const tempCanvas = document.createElement('canvas');
-          tempCanvas.width = SIZE;
-          tempCanvas.height = SIZE;
-          const tCtx = tempCanvas.getContext('2d');
-          tCtx.imageSmoothingEnabled = false;
-          tCtx.drawImage(img, 0, 0, SIZE, SIZE);
-          const imageData = tCtx.getImageData(0, 0, SIZE, SIZE);
-          const data = imageData.data;
-          const pixels = layer.pixels;
-          for (let r=0; r<SIZE; r++) {
-            for (let c=0; c<SIZE; c++) {
-              const idx = (r*SIZE+c)*4;
-              const R = data[idx], G = data[idx+1], B = data[idx+2], A = data[idx+3];
-              if (A < 128) {
-                pixels[r][c] = null;
-              } else {
-                pixels[r][c] = rgbToHex(R,G,B);
-              }
-            }
-          }
-          saveHistory();
-          renderAll();
-        };
-        img.src = e.target.result;
+          })
+        })),
+        size: SIZE,
+        cols: cols
       };
-      reader.readAsDataURL(file);
+      try {
+        const response = await fetch(`${BACKEND_URL}/api/export-sprite`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        });
+        if (!response.ok) throw new Error('Error en el servidor');
+        const blob = await response.blob();
+        const link = document.createElement('a');
+        link.download = 'sprite_sheet_server.png';
+        link.href = URL.createObjectURL(blob);
+        link.click();
+      } catch (err) {
+        alert('Error al exportar sprite sheet desde el servidor: ' + err.message);
+      }
     }
 
-    // -------- GUARDAR / ABRIR PROYECTO (JSON) --------
-    function saveProject() {
+    // -------- GUARDAR / CARGAR PROYECTO (local y servidor) --------
+    function saveProjectLocal() {
       const data = {
         version: '2.0',
         frames: state.frames.map(frame => ({
           layers: frame.layers.map(layer => {
             if (layer.type === 'adjustment') {
-              return {
-                name: layer.name,
-                visible: layer.visible,
-                type: 'adjustment',
-                adjustmentType: layer.adjustmentType,
-                params: layer.params
-              };
+              return { name: layer.name, visible: layer.visible, type: 'adjustment', adjustmentType: layer.adjustmentType, params: layer.params };
             } else {
-              return {
-                name: layer.name,
-                visible: layer.visible,
-                type: 'normal',
-                pixels: layer.pixels
-              };
+              return { name: layer.name, visible: layer.visible, type: 'normal', pixels: layer.pixels };
             }
           })
         }))
@@ -1703,49 +1147,162 @@
       link.click();
     }
 
-    function loadProject(file) {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        try {
-          const data = JSON.parse(e.target.result);
-          if (!data.frames || !data.frames.length) throw new Error('Formato inválido');
-          state.frames = data.frames.map(frame => ({
-            layers: frame.layers.map(layer => {
-              if (layer.type === 'adjustment') {
-                return {
-                  name: layer.name || 'Ajuste',
-                  visible: layer.visible !== undefined ? layer.visible : true,
-                  type: 'adjustment',
-                  adjustmentType: layer.adjustmentType || 'brightness',
-                  params: layer.params || {}
-                };
-              } else {
-                return {
-                  name: layer.name || 'Capa',
-                  visible: layer.visible !== undefined ? layer.visible : true,
-                  type: 'normal',
-                  pixels: layer.pixels || Array.from({ length: SIZE }, () => Array(SIZE).fill(null))
-                };
-              }
-            })
-          }));
-          state.currentFrameIndex = 0;
-          state.currentLayerIndex = 0;
-          saveHistory();
-          renderAll();
-        } catch (err) {
-          alert('Error al cargar el proyecto: ' + err.message);
-        }
+    async function saveProjectServer() {
+      const data = {
+        name: prompt('Nombre del proyecto:', 'Mi proyecto'),
+        frames: state.frames.map(frame => ({
+          layers: frame.layers.map(layer => {
+            if (layer.type === 'adjustment') {
+              return { name: layer.name, visible: layer.visible, type: 'adjustment', adjustmentType: layer.adjustmentType, params: layer.params };
+            } else {
+              return { name: layer.name, visible: layer.visible, type: 'normal', pixels: layer.pixels };
+            }
+          })
+        }))
       };
-      reader.readAsText(file);
+      try {
+        const response = await fetch(`${BACKEND_URL}/api/projects`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        });
+        if (!response.ok) throw new Error('Error al guardar');
+        const result = await response.json();
+        alert(`Proyecto guardado con ID: ${result.id}`);
+        loadProjectList();
+      } catch (err) {
+        alert('Error al guardar en el servidor: ' + err.message);
+      }
     }
 
-    // -------- REPRODUCIR ANIMACIÓN --------
-    function togglePlay() {
-      if (state.playing) {
-        stopPlay();
-        return;
+    async function loadProjectList() {
+      try {
+        const response = await fetch(`${BACKEND_URL}/api/projects`);
+        if (!response.ok) throw new Error('Error al obtener lista');
+        const projects = await response.json();
+        const listEl = document.getElementById('projectList');
+        if (!projects.length) {
+          listEl.innerHTML = '<div style="color:#888;font-size:13px;">No hay proyectos guardados.</div>';
+          return;
+        }
+        let html = '';
+        projects.forEach(p => {
+          html += `
+            <div class="project-item" data-id="${p.id}">
+              <span>${p.name}</span>
+              <span>
+                <span class="load-proj" style="cursor:pointer;color:#00d4ff;">📂</span>
+                <span class="del-proj" style="cursor:pointer;">✕</span>
+              </span>
+            </div>
+          `;
+        });
+        listEl.innerHTML = html;
+        // Eventos de carga y eliminación
+        listEl.querySelectorAll('.load-proj').forEach(el => {
+          el.closest('.project-item').addEventListener('click', (e) => {
+            if (e.target.classList.contains('del-proj')) return;
+            const id = e.currentTarget.dataset.id;
+            loadProjectFromServer(id);
+          });
+        });
+        listEl.querySelectorAll('.del-proj').forEach(el => {
+          el.addEventListener('click', async (e) => {
+            e.stopPropagation();
+            // No implementamos DELETE en el backend, solo listar y cargar
+            alert('Eliminación no implementada en el backend. Puedes borrar manualmente el archivo.');
+          });
+        });
+      } catch (err) {
+        console.error(err);
+        document.getElementById('projectList').innerHTML = '<div style="color:#ff6b6b;">Error al cargar lista.</div>';
       }
+    }
+
+    async function loadProjectFromServer(projectId) {
+      try {
+        const response = await fetch(`${BACKEND_URL}/api/projects/${projectId}`);
+        if (!response.ok) throw new Error('Proyecto no encontrado');
+        const data = await response.json();
+        if (!data.frames) throw new Error('Formato inválido');
+        state.frames = data.frames.map(frame => ({
+          layers: frame.layers.map(layer => {
+            if (layer.type === 'adjustment') {
+              return { name: layer.name || 'Ajuste', visible: layer.visible !== undefined ? layer.visible : true, type: 'adjustment', adjustmentType: layer.adjustmentType || 'brightness', params: layer.params || {} };
+            } else {
+              return { name: layer.name || 'Capa', visible: layer.visible !== undefined ? layer.visible : true, type: 'normal', pixels: layer.pixels || Array.from({ length: SIZE }, () => Array(SIZE).fill(null)) };
+            }
+          })
+        }));
+        state.currentFrameIndex = 0;
+        state.currentLayerIndex = 0;
+        saveHistory();
+        renderAll();
+        alert('Proyecto cargado correctamente');
+      } catch (err) {
+        alert('Error al cargar proyecto: ' + err.message);
+      }
+    }
+
+    // -------- IMPORTAR IMAGEN (local) --------
+    function importImage(file) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const img = new Image();
+        img.onload = () => {
+          const frame = state.frames[state.currentFrameIndex];
+          if (!frame) return;
+          const layer = getActiveLayer();
+          if (!layer || layer.type === 'adjustment') return;
+          const tempCanvas = document.createElement('canvas');
+          tempCanvas.width = SIZE; tempCanvas.height = SIZE;
+          const tCtx = tempCanvas.getContext('2d');
+          tCtx.imageSmoothingEnabled = false;
+          tCtx.drawImage(img, 0, 0, SIZE, SIZE);
+          const imageData = tCtx.getImageData(0, 0, SIZE, SIZE);
+          const data = imageData.data;
+          const pixels = layer.pixels;
+          for (let r=0; r<SIZE; r++) {
+            for (let c=0; c<SIZE; c++) {
+              const idx = (r*SIZE+c)*4;
+              const R = data[idx], G = data[idx+1], B = data[idx+2], A = data[idx+3];
+              if (A < 128) pixels[r][c] = null;
+              else pixels[r][c] = rgbToHex(R,G,B);
+            }
+          }
+          saveHistory();
+          renderAll();
+        };
+        img.src = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+
+    // -------- EFECTOS SOBRE CAPA ACTIVA (igual que antes) --------
+    function applyEffectToLayer(effect) {
+      const layer = getActiveLayer();
+      if (!layer || layer.type === 'adjustment') return;
+      const pixels = layer.pixels;
+      let newPixels;
+      switch (effect) {
+        case 'scale2x': { newPixels = Array.from({ length: SIZE }, () => Array(SIZE).fill(null)); for (let r=0; r<SIZE; r++) { for (let c=0; c<SIZE; c++) { const srcR = Math.floor(r/2), srcC = Math.floor(c/2); if (srcR < SIZE && srcC < SIZE) newPixels[r][c] = pixels[srcR][srcC]; } } break; }
+        case 'scaleHalf': { newPixels = Array.from({ length: SIZE }, () => Array(SIZE).fill(null)); for (let r=0; r<SIZE; r++) { for (let c=0; c<SIZE; c++) { const srcR = Math.floor(r/2), srcC = Math.floor(c/2); if (srcR < SIZE/2 && srcC < SIZE/2) newPixels[r][c] = pixels[srcR][srcC]; } } break; }
+        case 'rot90': { newPixels = Array.from({ length: SIZE }, () => Array(SIZE).fill(null)); for (let r=0; r<SIZE; r++) { for (let c=0; c<SIZE; c++) { newPixels[c][SIZE-1-r] = pixels[r][c]; } } break; }
+        case 'rot180': { newPixels = Array.from({ length: SIZE }, () => Array(SIZE).fill(null)); for (let r=0; r<SIZE; r++) { for (let c=0; c<SIZE; c++) { newPixels[SIZE-1-r][SIZE-1-c] = pixels[r][c]; } } break; }
+        case 'rot270': { newPixels = Array.from({ length: SIZE }, () => Array(SIZE).fill(null)); for (let r=0; r<SIZE; r++) { for (let c=0; c<SIZE; c++) { newPixels[SIZE-1-c][r] = pixels[r][c]; } } break; }
+        case 'flipH': { newPixels = pixels.map(row => [...row].reverse()); break; }
+        case 'flipV': { newPixels = [...pixels].reverse(); break; }
+        case 'invert': { newPixels = pixels.map(row => row.map(color => { if (color === null) return null; const [R,G,B] = hexToRgb(color); return rgbToHex(255-R, 255-G, 255-B); })); break; }
+        default: return;
+      }
+      layer.pixels = newPixels;
+      saveHistory();
+      renderAll();
+    }
+
+    // -------- REPRODUCIR ANIMACIÓN (igual) --------
+    function togglePlay() {
+      if (state.playing) { stopPlay(); return; }
       if (state.frames.length < 2) return;
       state.playing = true;
       document.getElementById('playBtn').textContent = '⏹ Detener';
@@ -1757,102 +1314,46 @@
         renderAll();
       }, state.speed);
     }
+    function stopPlay() { state.playing = false; if (state.playTimer) { clearInterval(state.playTimer); state.playTimer = null; } document.getElementById('playBtn').textContent = '▶️ Reproducir'; }
 
-    function stopPlay() {
-      state.playing = false;
-      if (state.playTimer) {
-        clearInterval(state.playTimer);
-        state.playTimer = null;
-      }
-      document.getElementById('playBtn').textContent = '▶️ Reproducir';
+    // -------- PALETA Y TOOLTIPS (igual) --------
+    function renderPalette() {
+      let html = '';
+      PALETTE.forEach(c => {
+        const sel = c === state.color ? 'selected' : '';
+        html += `<div class="color-swatch ${sel}" style="background:${c}" data-color="${c}"></div>`;
+      });
+      paletteEl.innerHTML = html;
+      paletteEl.querySelectorAll('.color-swatch').forEach(el => {
+        el.addEventListener('click', () => { state.color = el.dataset.color; customColorInput.value = state.color; updatePaletteSelection(); renderAll(); });
+      });
     }
-
-    // -------- EFECTOS SOBRE CAPA ACTIVA (normal) --------
-    function applyEffectToLayer(effect) {
-      const layer = getActiveLayer();
-      if (!layer || layer.type === 'adjustment') return;
-      const pixels = layer.pixels;
-      let newPixels;
-
-      switch (effect) {
-        case 'scale2x': {
-          newPixels = Array.from({ length: SIZE }, () => Array(SIZE).fill(null));
-          for (let r=0; r<SIZE; r++) {
-            for (let c=0; c<SIZE; c++) {
-              const srcR = Math.floor(r/2), srcC = Math.floor(c/2);
-              if (srcR < SIZE && srcC < SIZE) {
-                newPixels[r][c] = pixels[srcR][srcC];
-              }
-            }
-          }
-          break;
-        }
-        case 'scaleHalf': {
-          newPixels = Array.from({ length: SIZE }, () => Array(SIZE).fill(null));
-          for (let r=0; r<SIZE; r++) {
-            for (let c=0; c<SIZE; c++) {
-              const srcR = Math.floor(r/2), srcC = Math.floor(c/2);
-              if (srcR < SIZE/2 && srcC < SIZE/2) {
-                newPixels[r][c] = pixels[srcR][srcC];
-              }
-            }
-          }
-          break;
-        }
-        case 'rot90': {
-          newPixels = Array.from({ length: SIZE }, () => Array(SIZE).fill(null));
-          for (let r=0; r<SIZE; r++) {
-            for (let c=0; c<SIZE; c++) {
-              newPixels[c][SIZE-1-r] = pixels[r][c];
-            }
-          }
-          break;
-        }
-        case 'rot180': {
-          newPixels = Array.from({ length: SIZE }, () => Array(SIZE).fill(null));
-          for (let r=0; r<SIZE; r++) {
-            for (let c=0; c<SIZE; c++) {
-              newPixels[SIZE-1-r][SIZE-1-c] = pixels[r][c];
-            }
-          }
-          break;
-        }
-        case 'rot270': {
-          newPixels = Array.from({ length: SIZE }, () => Array(SIZE).fill(null));
-          for (let r=0; r<SIZE; r++) {
-            for (let c=0; c<SIZE; c++) {
-              newPixels[SIZE-1-c][r] = pixels[r][c];
-            }
-          }
-          break;
-        }
-        case 'flipH': {
-          newPixels = pixels.map(row => [...row].reverse());
-          break;
-        }
-        case 'flipV': {
-          newPixels = [...pixels].reverse();
-          break;
-        }
-        case 'invert': {
-          newPixels = pixels.map(row => row.map(color => {
-            if (color === null) return null;
-            const [R,G,B] = hexToRgb(color);
-            return rgbToHex(255-R, 255-G, 255-B);
-          }));
-          break;
-        }
-        default: return;
-      }
-      layer.pixels = newPixels;
-      saveHistory();
-      renderAll();
+    function updatePaletteSelection() {
+      paletteEl.querySelectorAll('.color-swatch').forEach(el => {
+        el.classList.toggle('selected', el.dataset.color === state.color);
+      });
     }
-
-    // -------- INFO --------
-    function updateInfo() {
-      // ya se actualiza en movimiento
+    function setupTools() {
+      document.querySelectorAll('#toolGroup button').forEach(btn => {
+        btn.addEventListener('click', () => {
+          document.querySelectorAll('#toolGroup button').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          state.tool = btn.dataset.tool;
+          if (state.tool !== 'select') { state.selection = null; state.isDraggingSelection = false; }
+          renderAll();
+        });
+      });
     }
+    function setupBrushSize() {
+      document.querySelectorAll('.brush-size button').forEach(btn => {
+        btn.addEventListener('click', () => {
+          document.querySelectorAll('.brush-size button').forEach(b => b.classList.remove('active-brush'));
+          btn.classList.add('active-brush');
+          state.brushSize = parseInt(btn.dataset.size);
+        });
+      });
+    }
+    function updateInfo() { /* se actualiza en movimiento */ }
 
     // -------- INICIALIZACIÓN --------
     function init() {
@@ -1865,7 +1366,6 @@
       renderPalette();
       renderAll();
 
-      // Eventos del canvas
       canvas.addEventListener('mousedown', handleCanvasDown);
       canvas.addEventListener('mousemove', handleCanvasMove);
       canvas.addEventListener('mouseup', handleCanvasUp);
@@ -1880,7 +1380,6 @@
       setupTools();
       setupBrushSize();
 
-      // Color personalizado
       customColorInput.addEventListener('input', (e) => {
         state.color = e.target.value;
         updatePaletteSelection();
@@ -1903,49 +1402,63 @@
       // Frames
       document.getElementById('addFrameBtn').addEventListener('click', addFrame);
       document.getElementById('dupFrameBtn').addEventListener('click', duplicateFrame);
-      document.getElementById('delFrameBtn').addEventListener('click', () => {
-        deleteFrame(state.currentFrameIndex);
-      });
+      document.getElementById('delFrameBtn').addEventListener('click', () => deleteFrame(state.currentFrameIndex));
 
       // Play
       document.getElementById('playBtn').addEventListener('click', togglePlay);
-
-      // Velocidad
       speedSlider.addEventListener('input', (e) => {
         state.speed = parseInt(e.target.value);
         speedLabel.textContent = state.speed + 'ms';
-        if (state.playing) {
-          stopPlay();
-          togglePlay();
-        }
+        if (state.playing) { stopPlay(); togglePlay(); }
       });
       speedLabel.textContent = state.speed + 'ms';
 
-      // Exportar
+      // Exportar local
       document.getElementById('exportPngBtn').addEventListener('click', exportPNG);
-      document.getElementById('exportGifBtn').addEventListener('click', exportGIF);
-      document.getElementById('exportSpriteBtn').addEventListener('click', exportSpriteSheet);
-      document.getElementById('exportSpriteBtn2').addEventListener('click', exportSpriteSheet);
+      document.getElementById('exportGifBtn').addEventListener('click', exportGIFLocal);
+      document.getElementById('exportGifServerBtn').addEventListener('click', exportGIFServer);
+      document.getElementById('exportSpriteBtn').addEventListener('click', exportSpriteServer);
+      document.getElementById('exportSpriteBtn2').addEventListener('click', exportSpriteServer);
 
-      // Importar
-      document.getElementById('importBtn').addEventListener('click', () => {
-        document.getElementById('fileInput').click();
-      });
+      // Importar imagen
+      document.getElementById('importBtn').addEventListener('click', () => document.getElementById('fileInput').click());
       document.getElementById('fileInput').addEventListener('change', (e) => {
-        if (e.target.files.length) {
-          importImage(e.target.files[0]);
-        }
+        if (e.target.files.length) { importImage(e.target.files[0]); }
         e.target.value = '';
       });
 
-      // Guardar/Abrir proyecto
-      document.getElementById('saveProjectBtn').addEventListener('click', saveProject);
-      document.getElementById('loadProjectBtn').addEventListener('click', () => {
-        document.getElementById('projectInput').click();
-      });
+      // Guardar local y servidor
+      document.getElementById('saveProjectBtn').addEventListener('click', saveProjectLocal);
+      document.getElementById('saveServerBtn').addEventListener('click', saveProjectServer);
+      document.getElementById('loadServerBtn').addEventListener('click', loadProjectList);
+      document.getElementById('refreshProjectsBtn').addEventListener('click', loadProjectList);
+
+      // Cargar proyecto local (por si acaso)
+      document.getElementById('loadProjectBtn').addEventListener('click', () => document.getElementById('projectInput').click());
       document.getElementById('projectInput').addEventListener('change', (e) => {
         if (e.target.files.length) {
-          loadProject(e.target.files[0]);
+          const reader = new FileReader();
+          reader.onload = (ev) => {
+            try {
+              const data = JSON.parse(ev.target.result);
+              if (!data.frames) throw new Error('Formato inválido');
+              state.frames = data.frames.map(frame => ({
+                layers: frame.layers.map(layer => {
+                  if (layer.type === 'adjustment') {
+                    return { name: layer.name || 'Ajuste', visible: layer.visible !== undefined ? layer.visible : true, type: 'adjustment', adjustmentType: layer.adjustmentType || 'brightness', params: layer.params || {} };
+                  } else {
+                    return { name: layer.name || 'Capa', visible: layer.visible !== undefined ? layer.visible : true, type: 'normal', pixels: layer.pixels || Array.from({ length: SIZE }, () => Array(SIZE).fill(null)) };
+                  }
+                })
+              }));
+              state.currentFrameIndex = 0;
+              state.currentLayerIndex = 0;
+              saveHistory();
+              renderAll();
+              alert('Proyecto local cargado');
+            } catch (err) { alert('Error al cargar proyecto local: ' + err.message); }
+          };
+          reader.readAsText(e.target.files[0]);
         }
         e.target.value = '';
       });
@@ -1969,9 +1482,11 @@
       document.getElementById('effectFlipV').addEventListener('click', () => applyEffectToLayer('flipV'));
       document.getElementById('effectInvert').addEventListener('click', () => applyEffectToLayer('invert'));
 
-      // Guardar historial inicial
-      saveHistory();
+      // Simetría
+      symmetryHCheck.addEventListener('change', () => { state.symmetryH = symmetryHCheck.checked; });
+      symmetryVCheck.addEventListener('change', () => { state.symmetryV = symmetryVCheck.checked; });
 
+      saveHistory();
       canvas.addEventListener('contextmenu', (e) => e.preventDefault());
     }
 
